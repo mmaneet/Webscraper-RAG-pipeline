@@ -8,3 +8,11 @@ for filename in os.listdir("PDFs"):
         for page in pdfReader.pages:
             text = page.extract_text()
             f.write(text)
+
+# Crush all the text:
+
+for filename in os.listdir("PDF_texts"):
+    text = ""
+    text += "".join([l.strip('\n\r') for l in open(f"PDF_texts/{filename}", "r", encoding="utf-8").readlines()])
+    with open(f"PDF_texts/{filename}", "wt", encoding="utf-8") as f:
+        f.write(text)
