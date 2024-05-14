@@ -13,8 +13,11 @@ After PDFs from any given google scholar query have been downloaded and processe
 
 USAGE NOTE: User's custom API key must be set as environment variable "OPENAI_API_KEY"
 
-Project Limitations:
+# Project Limitations:
 - Google Scholar URL must be manually written in code/manipulated (Will be addressed)
 - Google Scholar scraping is limited, articles w/o linked PDFs will not be scraped
 - File Processing is unoptimized, currently broken into 100-word chunks
 - RAG pipeline is underoptimized, uses GPT-3.5 turbo.
+
+# Use Cases:
+This project was initially developed as a curious way to gather evidence for my debate speeches/cases; As an avid debater, gathering, processing, and interpreting high quality evidence is always a tedious and critical process. This project began as a way to potentially optimize and automate it similar to applications like Consensus AI.
