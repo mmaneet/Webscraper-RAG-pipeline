@@ -1,5 +1,5 @@
 # File Processing Pipeline
-This project is twofold:
+This project is threefold:
 
 __1) Webscraping:__
 The project runs in console. This code must currently be edited to include a custom URL to your google scholar query, but a future revision will allow you to simply type your search query into the console.
