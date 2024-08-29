@@ -1,5 +1,6 @@
+import json
+
 from haystack.document_stores.types import DuplicatePolicy
-from haystack.telemetry import tutorial_running
 from datasets import load_dataset
 from haystack import Document
 from haystack.components.embedders import SentenceTransformersDocumentEmbedder
@@ -12,12 +13,11 @@ from getpass import getpass
 from haystack.components.generators import OpenAIGenerator
 from haystack import Pipeline
 
-tutorial_running(27)
-
+question = "Tell me 3 interesting things about Prompt Engineering from the context provided."  # Your Question Here
 
 document_store = InMemoryDocumentStore()
 
-dataset = load_dataset("PDF_texts", split="train")
+dataset = load_dataset("PDF_texts", split="test")
 docs = [Document(content=doc["text"]) for doc in dataset]
 
 doc_embedder = SentenceTransformersDocumentEmbedder(model="sentence-transformers/all-MiniLM-L6-v2")
@@ -49,25 +49,22 @@ if "OPENAI_API_KEY" not in os.environ:
     os.environ["OPENAI_API_KEY"] = getpass("Enter OpenAI API key:")
 generator = OpenAIGenerator(model="gpt-3.5-turbo-0125")
 
-
-
 basic_rag_pipeline = Pipeline()
-# Add components to your pipeline
 basic_rag_pipeline.add_component("text_embedder", text_embedder)
 basic_rag_pipeline.add_component("retriever", retriever)
 basic_rag_pipeline.add_component("prompt_builder", prompt_builder)
 basic_rag_pipeline.add_component("llm", generator)
 
-# Now, connect the components to each other
 basic_rag_pipeline.connect("text_embedder.embedding", "retriever.query_embedding")
 basic_rag_pipeline.connect("retriever", "prompt_builder.documents")
 basic_rag_pipeline.connect("prompt_builder", "llm")
 
-question = "What are three techniques I can use to make effective AI art?"
-
 response = basic_rag_pipeline.run({"text_embedder": {"text": question}, "prompt_builder": {"question": question}})
+response_text = response["llm"]["replies"][0]
+print(f"Your question was: {question}")
+print(f"ChatGPT's Document-Backed Response: \n{response_text}")
 
-print(response)
-print(response["llm"]["replies"][0])
+json_file_path = "api_response.json"
 
-
+with open(json_file_path, 'w') as json_file:
+    json.dump(response, json_file, indent=4)
