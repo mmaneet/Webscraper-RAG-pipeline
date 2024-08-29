@@ -1,4 +1,5 @@
 # Imports
+import urllib.parse
 import requests
 import re
 from selenium import webdriver as wb
@@ -15,9 +16,8 @@ driver = wb.Chrome(options=options)
 pdf_links = []
 
 # Hyperparameters
-NUM_PAGES = 10
-GS_URL = "https://scholar.google.com/scholar?start={}&q=prompt+engineering&hl=en&as_sdt=0,21"
-# replace the number after "start= " with {}
+NUM_PAGES = 10  # The Number of GS pages you want to scrape PDFs from
+SEARCH_QUERY = "What is Generative AI?"  # Your Search Query Here
 
 
 # Generate links from URL// Actual webscraping function
@@ -35,7 +35,9 @@ def update_titles_and_links_list():
 
 # Generate URL by page number
 def get_page_num_url(page_num: int) -> str:
-    return GS_URL.format((page_num - 1) * 10)
+    sq = urllib.parse.quote(re.sub(r'\s+', '+', SEARCH_QUERY.strip()))
+    return f"https://scholar.google.com/scholar?start={(page_num - 1) * 10}&q={sq}&hl=en&as_sdt=0,21"
+
 
 # Filename normalization
 def make_valid_filename(input_string: str) -> str:
@@ -63,11 +65,15 @@ def download_pdf_file(title: str, url: str):
 
 
 if __name__ == "__main__":
+    print(f"Your search query is: {SEARCH_QUERY}")
+    print(f"Scraping '{get_page_num_url(1)}'... ")
     for i in range(1, NUM_PAGES):
         driver.get(get_page_num_url(i))
         update_titles_and_links_list()
 
+    print("PDF download links acquired! Downloading now...")
     for name, link in pdf_links:
         download_pdf_file(name, link)
 
     time.sleep(100)
+    print("PDFs ready for processing!")
