@@ -1,5 +1,6 @@
 import os
 import pypdf
+import pypdf.errors as err
 
 
 def process_string(input_string):
@@ -30,17 +31,21 @@ def split_string(input_string, word_count):
 
     return substrings
 
+
 count = 0
 for filename in os.listdir("PDFs"):
     # filename = "[PDF]_Towards_a_catalog_of_prompt_patterns_to_enhance_the_discipline_of_prompt_engineering"
-    pdfReader = pypdf.PdfReader(f"PDFs\\{filename}")
-    with open(f"PDF_texts/{filename}.txt", "wt", encoding="utf-8") as f:
-        for page in pdfReader.pages:
-            text = process_string(page.extract_text())
-            chunks = split_string(text, 100)
-            if count <= 0:
-                print(text)
+    try:
+        pdfReader = pypdf.PdfReader(f"PDFs\\{filename}")
+        with open(f"PDF_texts/{filename}.txt", "wt", encoding="utf-8", errors='replace') as f:
+            for page in pdfReader.pages:
+                text = process_string(page.extract_text())
+                chunks = split_string(text, 100)
 
-            for t in chunks:
-                f.write("\n" + t)
-            count += 1
+                for t in chunks:
+                    f.write("\n" + t)
+                count += 1
+    except err.PdfStreamError as e:
+        print(f"Error reading {filename}: {e}")
+
+print("Files Successfully Processed!")
