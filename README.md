@@ -21,3 +21,7 @@ USAGE NOTE: User's custom API key must be set as environment variable "OPENAI_AP
 
 # Use Cases:
 This project was initially developed as a curious way to gather evidence for my debate speeches/cases; As an avid debater, gathering, processing, and interpreting high quality evidence is always a tedious and critical process. This project began as a way to potentially optimize and automate it similar to applications like Consensus AI.
+
+View a video demo of the project:
+https://youtu.be/cLaTMHc8vpM
+
