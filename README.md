@@ -11,8 +11,6 @@ The second file will process the PDFs into RAG processable data chunks. This scr
 __3) RAG pipeline:__
 After PDFs from any given google scholar query have been downloaded and processed, the RAG pipeline uses a basic RAG architecture operating on the Haystack API to send document inclusive queries to OpenAI's ChatGPT 3.5-turbo model. The pipline includes question processing/embedding, prompt generation, and querying.
 
-USAGE NOTE: User's custom API key must be set as environment variable "OPENAI_API_KEY"
-
 # Project Limitations:
 - Google Scholar URL must be manually written in code/manipulated (Will be addressed)
 - Google Scholar scraping is limited, articles w/o linked PDFs will not be scraped
